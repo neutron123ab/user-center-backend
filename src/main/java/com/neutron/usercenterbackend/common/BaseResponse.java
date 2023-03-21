@@ -10,6 +10,7 @@ import java.io.Serializable;
  */
 public class BaseResponse<T extends Serializable> implements Serializable {
 
+    private static final long serialVersionUID = 510916505691411117L;
     private final int code;
 
     private final T data;

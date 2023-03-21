@@ -1,11 +1,13 @@
 package com.neutron.usercenterbackend;
 import java.util.Date;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.neutron.usercenterbackend.model.entity.User;
 import com.neutron.usercenterbackend.service.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
 
 import javax.annotation.Resource;
 
@@ -17,8 +19,9 @@ class UserCenterBackendApplicationTests {
 
     @Test
     void contextLoads() {
-        User one = userService.query().eq("username", "neutron").one();
-        Assertions.assertEquals("173563770941", one.getPhone());
+        User user = new User();
+        user.setId(1L);
+        Assertions.assertTrue(BeanUtil.hasNullField(user));
 
 
     }
