@@ -1,6 +1,6 @@
-package generator.service;
+package com.neutron.usercenterbackend.service;
 
-import generator.entity.User;
+import com.neutron.usercenterbackend.model.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

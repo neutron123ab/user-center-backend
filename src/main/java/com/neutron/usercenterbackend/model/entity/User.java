@@ -1,4 +1,4 @@
-package generator.entity;
+package com.neutron.usercenterbackend.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 
@@ -8,6 +8,7 @@ import lombok.Data;
 
 /**
  * 用户表
+ * @author zzs
  * @TableName user
  */
 @TableName(value ="user")

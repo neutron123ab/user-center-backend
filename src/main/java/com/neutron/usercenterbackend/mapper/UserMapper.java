@@ -1,6 +1,6 @@
-package generator.mapper;
+package com.neutron.usercenterbackend.mapper;
 
-import generator.entity.User;
+import com.neutron.usercenterbackend.model.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
