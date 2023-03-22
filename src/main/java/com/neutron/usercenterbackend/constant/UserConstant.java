@@ -29,5 +29,10 @@ public final class UserConstant {
      */
     public static final int USER_CODE_MAX_LEN = 5;
 
+    /**
+     * 用户登录态键
+     */
+    public static final String USER_LOGIN_STATE = "userLoginState";
+
 
 }

@@ -6,12 +6,16 @@ import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.neutron.usercenterbackend.common.ErrorCode;
 import com.neutron.usercenterbackend.exception.BusinessException;
+import com.neutron.usercenterbackend.model.dto.UserDTO;
 import com.neutron.usercenterbackend.model.entity.User;
+import com.neutron.usercenterbackend.model.request.UserLoginRequest;
 import com.neutron.usercenterbackend.model.request.UserRegisterRequest;
 import com.neutron.usercenterbackend.service.UserService;
 import com.neutron.usercenterbackend.mapper.UserMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,11 +26,14 @@ import static com.neutron.usercenterbackend.constant.UserConstant.*;
  * @description 针对表【user(用户表)】的数据库操作Service实现
  * @createDate 2023-03-21 15:12:31
  */
+@Slf4j
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         implements UserService {
 
     private static final String SALT = "neutron";
+
+    private static final String VALID_PATTERN = "^[a-zA-Z0-9]+$";
 
     @Override
     public long userRegister(UserRegisterRequest userRegisterRequest) {
@@ -53,8 +60,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户公司编号长度不在区间[1, 5]内");
         }
         //6.账号不能包含特殊字符
-        String validPattern = "^[a-zA-Z0-9]+$";
-        Pattern pattern = Pattern.compile(validPattern);
+        Pattern pattern = Pattern.compile(VALID_PATTERN);
         Matcher matcher = pattern.matcher(userRegisterRequest.getUserAccount());
         if(!matcher.find()){
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户账号不能包含特殊字符");
@@ -88,6 +94,47 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         //12.返回新用户id
 
         return user.getId();
+    }
+
+    @Override
+    public UserDTO userLogin(UserLoginRequest userLoginRequest, HttpServletRequest request) {
+
+        //1.非空
+        if (BeanUtil.hasNullField(userLoginRequest)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数不能为空");
+        }
+        //2.账号长度不小于4位
+        String userAccount = userLoginRequest.getUserAccount();
+        if(userAccount.length() < USER_ACCOUNT_MIN_LEN){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户账号过短");
+        }
+        //3.密码长度不小于8位
+        String userPassword = userLoginRequest.getUserPassword();
+        if(userPassword.length() < USER_PASSWORD_MIN_LEN) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码过短");
+        }
+        //4.账号不包含特殊字符
+        Pattern pattern = Pattern.compile(VALID_PATTERN);
+        Matcher matcher = pattern.matcher(userAccount);
+        if(!matcher.find()){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "不能包含特殊字符");
+        }
+        //5.密码比对
+        String encodedPassword = SecureUtil.md5(userPassword + SALT);
+        User user = query().eq("user_password", encodedPassword)
+                .eq("user_account", userAccount)
+                .one();
+        if(BeanUtil.isEmpty(user)){
+            log.info("user login failed, userAccount cannot match password");
+            throw new BusinessException(ErrorCode.NULL_ERROR, "找不到该用户");
+        }
+        //6.用户信息脱敏
+        UserDTO userDTO = new UserDTO();
+        BeanUtil.copyProperties(user, userDTO);
+        //7.记录用户登录态（session）
+        request.getSession().setAttribute(USER_LOGIN_STATE, userDTO);
+        //8.返回脱敏后的用户信息
+        return userDTO;
     }
 }
 

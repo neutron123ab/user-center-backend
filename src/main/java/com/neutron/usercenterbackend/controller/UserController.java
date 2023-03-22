@@ -5,6 +5,8 @@ import com.neutron.usercenterbackend.common.BaseResponse;
 import com.neutron.usercenterbackend.common.ErrorCode;
 import com.neutron.usercenterbackend.common.ResultUtils;
 import com.neutron.usercenterbackend.exception.BusinessException;
+import com.neutron.usercenterbackend.model.dto.UserDTO;
+import com.neutron.usercenterbackend.model.request.UserLoginRequest;
 import com.neutron.usercenterbackend.model.request.UserRegisterRequest;
 import com.neutron.usercenterbackend.service.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author zzs
@@ -30,7 +33,6 @@ public class UserController {
         if(userRegisterRequest == null){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-
         boolean flag = BeanUtil.hasNullField(userRegisterRequest);
         if(flag){
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数不能为空");
@@ -38,6 +40,19 @@ public class UserController {
         long userId = userService.userRegister(userRegisterRequest);
 
         return ResultUtils.success(userId);
+    }
+
+    @PostMapping("/login")
+    public BaseResponse<UserDTO> userLoginController(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest request){
+        if(userLoginRequest == null){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        boolean flag = BeanUtil.hasNullField(userLoginRequest);
+        if(flag){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数不能为空");
+        }
+        UserDTO userDTO = userService.userLogin(userLoginRequest, request);
+        return ResultUtils.success(userDTO);
     }
 
 
