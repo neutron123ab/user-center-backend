@@ -8,6 +8,9 @@ import java.io.Serializable;
  */
 public class ResultUtils {
 
+    private ResultUtils() {
+    }
+
     public static <T extends Serializable> BaseResponse<T> success(T data){
         return new BaseResponse<>(0, data, "ok");
     }
