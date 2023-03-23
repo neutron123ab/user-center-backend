@@ -28,8 +28,7 @@ public interface UserService extends IService<User> {
      *
      * @param userLoginRequest 用户登录实体类（账号、密码）
      * @param request 请求
-     * @return 用户脱敏数据
+     * @return 用户脱敏信息
      */
     UserDTO userLogin(UserLoginRequest userLoginRequest, HttpServletRequest request);
-
 }

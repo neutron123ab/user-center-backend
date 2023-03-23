@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import static com.neutron.usercenterbackend.constant.UserConstant.USER_LOGIN_STATE;
+
 /**
  * @author zzs
  * @date 2023/3/21 15:58
@@ -51,6 +53,16 @@ public class UserController {
         }
         UserDTO userDTO = userService.userLogin(userLoginRequest, request);
         return ResultUtils.success(userDTO, "登录成功");
+    }
+
+    @GetMapping("/getUserInfo")
+    public BaseResponse<UserDTO> getUserInfoController(HttpServletRequest request){
+        Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
+        UserDTO userInfo = (UserDTO) userObj;
+        if(userInfo == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN);
+        }
+        return ResultUtils.success(userInfo);
     }
 
 

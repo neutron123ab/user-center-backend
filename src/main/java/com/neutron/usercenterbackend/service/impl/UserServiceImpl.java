@@ -5,6 +5,7 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.neutron.usercenterbackend.common.ErrorCode;
+import com.neutron.usercenterbackend.common.ResultUtils;
 import com.neutron.usercenterbackend.exception.BusinessException;
 import com.neutron.usercenterbackend.model.dto.UserDTO;
 import com.neutron.usercenterbackend.model.entity.User;
