@@ -15,6 +15,10 @@ public class ResultUtils {
         return new BaseResponse<>(0, data, "ok");
     }
 
+    public static <T extends Serializable> BaseResponse<T> success(T data, String description){
+        return new BaseResponse<>(0, data, "ok", description);
+    }
+
     public static <T extends Serializable> BaseResponse<T> error(ErrorCode errorCode){
         return new BaseResponse<>(errorCode);
     }

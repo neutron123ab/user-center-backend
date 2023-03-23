@@ -9,10 +9,7 @@ import com.neutron.usercenterbackend.model.dto.UserDTO;
 import com.neutron.usercenterbackend.model.request.UserLoginRequest;
 import com.neutron.usercenterbackend.model.request.UserRegisterRequest;
 import com.neutron.usercenterbackend.service.UserService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 @RequestMapping("/user")
+@CrossOrigin
 public class UserController {
 
     @Resource
@@ -39,7 +37,7 @@ public class UserController {
         }
         long userId = userService.userRegister(userRegisterRequest);
 
-        return ResultUtils.success(userId);
+        return ResultUtils.success(userId, "注册成功");
     }
 
     @PostMapping("/login")
@@ -52,7 +50,7 @@ public class UserController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数不能为空");
         }
         UserDTO userDTO = userService.userLogin(userLoginRequest, request);
-        return ResultUtils.success(userDTO);
+        return ResultUtils.success(userDTO, "登录成功");
     }
 
 
