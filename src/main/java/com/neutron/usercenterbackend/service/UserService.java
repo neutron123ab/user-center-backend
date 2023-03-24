@@ -1,5 +1,6 @@
 package com.neutron.usercenterbackend.service;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.neutron.usercenterbackend.model.dto.UserDTO;
 import com.neutron.usercenterbackend.model.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -31,4 +32,12 @@ public interface UserService extends IService<User> {
      * @return 用户脱敏信息
      */
     UserDTO userLogin(UserLoginRequest userLoginRequest, HttpServletRequest request);
+
+    /**
+     * 用户信息脱敏
+     *
+     * @param user 用户信息
+     * @return 用户脱敏信息
+     */
+    UserDTO getSafetyUser(User user);
 }

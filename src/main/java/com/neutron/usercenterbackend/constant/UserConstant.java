@@ -34,5 +34,10 @@ public final class UserConstant {
      */
     public static final String USER_LOGIN_STATE = "userLoginState";
 
+    /**
+     * 管理员权限
+     */
+    public static final int ADMIN_ROLE = 1;
+
 
 }

@@ -137,6 +137,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         //8.返回脱敏后的用户信息
         return userDTO;
     }
+
+    @Override
+    public UserDTO getSafetyUser(User user) {
+        UserDTO userDTO = new UserDTO();
+        BeanUtil.copyProperties(user, userDTO);
+        return userDTO;
+    }
+
+
 }
 
 
