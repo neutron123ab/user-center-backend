@@ -88,6 +88,18 @@ public class UserController {
         return ResultUtils.success(userList);
     }
 
+    @PostMapping("/delete")
+    public BaseResponse<Boolean> deleteUser(long id, HttpServletRequest request) {
+        if(!isAdmin(request)) {
+            throw new BusinessException(ErrorCode.NO_AUTH);
+        }
+        if(id <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        boolean flag = userService.removeById(id);
+        return ResultUtils.success(flag);
+    }
+
     /**
      * 判断是否为管理员
      *
